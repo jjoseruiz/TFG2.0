@@ -68,13 +68,18 @@ library(malf.templates)
 #PRUEBAS EN LA APP
 # s1_f = antsImageRead("s1_FLAIR_CORRECTED.nii.gz")
 pathImagenes="/Volumes/VMware Shared Folders/3D MR image database of Multiple Sclerosis patients with white matter lesion segmentations/Banco/"
-i=13
+pathImagenes="/Users/juan/Documents/Imagenes/patient01-05/patient02/raw/"
+i=2
 FLAIR = antsImageRead(paste0(pathImagenes,"SN",i,"_FLAIR_BRAIN.nii.gz"))
+FLAIR = antsImageRead(paste0(pathImagenes,"patient",i,"_FLAIR.nii.gz"))
 # FLAIR = readnii("/Users/juanjoseruizpenela/Documents/GIT REPOSITORY/myrepo/BRAIN_IMAGES/S2_FLAIR_BRAIN.nii.gz")
 # FLAIR = antsImageRead(paste0("/Users/juanjoseruizpenela/Documents/IMG1/raw_images/","patient",30,"_FLAIR.nii.gz"))
 ortho2(FLAIR)
 T1 = antsImageRead(paste0(pathImagenes,"SN",i,"_T1W_BRAIN.nii.gz"))
+T1 = antsImageRead(paste0(pathImagenes,"patient0",i,"_T1W.nii.gz"))
 T2 = antsImageRead(paste0(pathImagenes,"SN",i,"_T2W_BRAIN.nii.gz"))
+T2 = antsImageRead(paste0(pathImagenes,"patient",i,"_T2W.nii.gz"))
+
 # T1 = readnii("/Users/juanjoseruizpenela/Documents/GIT REPOSITORY/myrepo/BRAIN_IMAGES/S2_T1_BRAIN.nii.gz")
 # FLAIR_CORREGIDA3 = correccion(FLAIR_RAW)
 # FLAIR_RAW = readnii("/Users/juanjoseruizpenela/Documents/IMG1/raw_images/patient30_FLAIR.nii.gz")

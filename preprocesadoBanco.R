@@ -8,9 +8,10 @@ library(extrantsr)
 #Búsqueda de imagen con mayor resolución (mayor cantidad de píxeles)
 buscaResolucion()
 
-# S1_FLAIR_CORRECTED=correccion(antsImageRead(paste0("/Users/juan/Documents/Imagenes/patient","01-05","/patient","01","/raw/patient","01","_FLAIR.nii.gz")))
+S1_FLAIR_CORRECTED=correccion(antsImageRead(paste0("/Users/juan/Documents/Imagenes/patient","01-05","/patient","01","/raw/patient","01","_FLAIR.nii.gz")))
 # antsImageWrite(S1_FLAIR_CORRECTED,"/Users/juan/Documents/Imagenes/Banco/S1_FLAIR_CORRECTED.nii.gz")
-S1_FLAIR_CORRECTED = antsImageRead("/Users/juan/Documents/Imagenes/Banco/S1_FLAIR_CORRECTED.nii.gz")
+pathImagenes="/Volumes/VMware Shared Folders/3D MR image database of Multiple Sclerosis patients with white matter lesion segmentations/Banco/"
+S1_FLAIR_CORRECTED = antsImageRead(paste0(pathImagenes,"S1_FLAIR_CORRECTED.nii.gz"))
 S1_MASK = antsImageRead(paste0("/Users/juan/Documents/Imagenes/patient","01-05","/patient","01","/patient","01","_brainmask.nii.gz"))
 #Enlace para descargar TODAS las imágenes preprocesadas y calculadas sus simétricas, asimétricas, máscaras y GT --> https://drive.google.com/file/d/1F7IY99OY2B6rrff5_AqDhzWOJohENiOE/view?usp=sharing
 #PARA MI DATASET DE MRI APLICAREMOS LA SIGUIENTE SECUENCIA DE PASOS

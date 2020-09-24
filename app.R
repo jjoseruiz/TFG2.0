@@ -10,7 +10,6 @@
 library(shiny)
 library(shinycssloaders)
 library(shinythemes)
-library(RNifti)
 library(neurobase)
 library(ANTsR)
 library(extrantsr)
@@ -22,7 +21,6 @@ library(modeest)
 library(papayar)
 library(papayaWidget)
 library(OpenImageR)
-library(oro.nifti)
 library(malf.templates)
 source("eligeVoxelPaciente.R")
 source("preprocesadoPaciente.R")
@@ -154,17 +152,17 @@ server <- function(input, output,session) {
   })
 
   #Muestra la imagen FLAIR subida
-  output$plotFLAIR<-renderPlot({
-    if(!is.null(input$ImagenFlair) & !is.null(input$ImagenT1)){
-      ortho2(app_imagenes()[[1]])
-    }
-  })
+  # output$plotFLAIR<-renderPlot({
+  #   if(!is.null(input$ImagenFlair) & !is.null(input$ImagenT1)){
+  #     ortho2(app_imagenes()[[1]])
+  #   }
+  # })
 
   #Muestra la Imagen T1 Subida
-  output$plotT1<-renderPlot({
-    if(!is.null(input$ImagenFlair) & !is.null(input$ImagenT1)){
-      ortho2(app_imagenes()[[2]])
-    }  })
+  # output$plotT1<-renderPlot({
+  #   if(!is.null(input$ImagenFlair) & !is.null(input$ImagenT1)){
+  #     ortho2(app_imagenes()[[2]])
+  #   }  })
   observeEvent(input$botonSubir,{
     output$clics<-renderText({
       if(!is.null(input$ImagenFlair) & !is.null(input$ImagenT1)){
@@ -173,6 +171,7 @@ server <- function(input, output,session) {
         "Suba ambas imágenes porfavor"
       }
     })
+    print(app_imagenes()[1])
     print("he clickeado")
   })
   
