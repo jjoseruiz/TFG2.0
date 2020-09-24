@@ -1,0 +1,79 @@
+elegirVoxeles<-function(num_voxel,mascara_gt,FLAIR,MASK)
+{
+  #creamos una funcion a parte para comprobar si una coordenada ya estaba introducida
+  source("estaEnLista.R")
+  if(num_voxel>1  & num_voxel%%2==0){
+    if(!is.antsImage(mascara_gt)){
+      #si la imagen/mascara gt que nos dan no es de tipo ants, la transformamos
+      ants_mascara = as.antsImage(mascara_gt)
+    }else{
+      #si lo es, asignamos su valor a la variable ants_mascara
+      ants_mascara = mascara_gt
+      mascara = as.nifti(mascara_gt)
+    }
+    lesion = which(ants_mascara>0)
+    #eliminamos fondos y nos quedamos con solo cerebro
+    noFondo=which(FLAIR[MASK<1]>0)
+    noLes=which(FLAIR[mascara_gt<1]>0)
+    #intersect elimina duplicados
+    sano = intersect(noLes,noFondo)
+    
+    i  = 0
+    j = 0
+    #tres columnas xyz
+    indices = matrix(nrow = num_voxel,ncol = 3) 
+    while(i<num_voxel/2){
+      coordLes = obtenCoord(sample(lesion,1),mascara_gt)
+      condExtremo1=(coordLes[1]<190&coordLes[2]<510&coordLes[3]<510)
+      condExtremo2=(coordLes[1]>2&coordLes[2]>2&coordLes[3]>2)
+      if(condExtremo1 & condExtremo2){
+        if(!estaEnLista(indices,coordLes) & i<num_voxel/2){
+          vecinosLes = getNeighborhoodAtVoxel(ants_mascara,coordLes,c(1,1,1))
+          values_Les = vecinosLes$values>0
+          l=0
+          while(l<length(vecinosLes$values) & i<num_voxel/2){
+            l = l+1
+            if(values_Les[l] & i<num_voxel/2 & !estaEnLista(indices,vecinosLes$indices[l,1:ncol(indices)])){
+              i = i + 1
+              #print(paste0("voxel LESION Nº-->",i))
+              indices[i+j,1:ncol(indices)] = vecinosLes$indices[l,1:ncol(indices)]
+            }
+          }
+          if(i==round(num_voxel/4))
+            print("mitad lesion")
+        }
+      }
+    }
+    print("LESION FIN")
+    
+    while(j<num_voxel/2){
+      coordSan = obtenCoord(sample(sano,1),mascara_gt)
+      condExtremo1=(coordSan[1]<190&coordSan[2]<510&coordSan[3]<510)
+      condExtremo2=(coordSan[1]>2&coordSan[2]>2&coordSan[3]>2)
+      if(condExtremo1&condExtremo2){
+        vecinosSan = getNeighborhoodAtVoxel(ants_mascara,coordSan,c(1,1,1))
+        values_San = vecinosSan$values<1
+        #condcion extremo
+        l=0
+        while(l<length(vecinosSan$values) & j<num_voxel/2)
+        {
+          l = l+1
+          condSano = values_San[l]
+          if(is.na(condSano))
+            condSano = FALSE
+          if(condSano & j<num_voxel/2 & !estaEnLista(indices,vecinosSan$indices[l,1:ncol(indices)]))
+          {
+            j = j + 1
+            #print(paste0("voxel SANO Nº-->",j))
+            indices[i+j,1:ncol(indices)] = vecinosSan$indices[l,1:ncol(indices)]
+          }
+        }
+        if(j==round(num_voxel/4))
+          print("mitad Sano")
+      }
+    }
+    print("SANO FIN")
+    return(indices)
+  }
+}
+
